@@ -1,0 +1,38 @@
+:host {
+    left: 50%;
+    max-width: 360px;
+    min-width: 200px;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+input {
+    outline: none;
+}
+
+
+// Form validation
+
+.ng-dirty {
+
+    &.ng-touched,
+    &.valid-once {
+
+        &.ng-valid {
+            border-color: green;
+        }
+
+        &.ng-invalid {
+            border-color: red;
+        }
+    }
+}
+
+.input-error {
+    color: red;
+    font-size: 10pt;
+}
+.input-error-wrapper {
+    height: 4px;
+}

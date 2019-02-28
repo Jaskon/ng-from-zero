@@ -1,0 +1,96 @@
+<div class="card">
+
+  <div class="card-header text-center">Регистрация</div>
+
+
+  <!-- Card body -->
+  <form class="card-body form" [formGroup]="userForm">
+
+    <!-- Logging error alert -->
+    <div *ngIf="loggingError" class="alert alert-danger text-center">
+      {{loggingError}}
+    </div>
+
+    <!-- Form elements -->
+    <div class="form-group">
+      <label for="emailInput">Email:</label>
+      <input id="emailInput" class="form-control" type="text"
+          formControlName="username" [ngClass]="{'valid-once': validOnce.username}">
+
+      <div class="input-error-wrapper">
+        <div *ngIf="username.invalid && username.dirty && (username.touched || validOnce.username)"
+            class="input-error">
+
+          <div [ngSwitch]="username.errors | firstKey">
+            <div *ngSwitchCase="'required'">Введите email</div>
+            <div *ngSwitchCase="'email'">Введите корректный email</div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="passwordInput">Password:</label>
+      <input id="passwordInput" class="form-control" type="password"
+          formControlName="password" [ngClass]="{'valid-once': validOnce.password}">
+
+      <div class="input-error-wrapper">
+        <div *ngIf="password.invalid && password.dirty && (password.touched || validOnce.password)"
+            class="input-error">
+
+          <div [ngSwitch]="password.errors | firstKey">
+            <div *ngSwitchCase="'required'">Введите пароль</div>
+            <div *ngSwitchCase="'minlength'">Не меньше шести символов</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nameInput">Name:</label>
+      <input id="nameInput" class="form-control" type="text"
+          formControlName="name" [ngClass]="{'valid-once': validOnce.name}">
+
+      <div class="input-error-wrapper">
+        <div *ngIf="name.invalid && name.dirty && (name.touched || validOnce.name)"
+            class="input-error">
+
+          <div [ngSwitch]="name.errors | firstKey">
+            <div *ngSwitchCase="'required'">Введите имя</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="agreementInput"
+          formControlName="agreement">
+      <label class="custom-control-label" for="agreementInput">Принимаю условия соглашения</label>
+    </div>
+
+    <div class="input-error-wrapper">
+      <div *ngIf="agreement.invalid && agreement.dirty"
+          class="input-error">
+
+        <div [ngSwitch]="agreement.errors | firstKey">
+          <div *ngSwitchCase="'pattern'">Вы должны принять условия соглашения</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-group mt-4 text-center">
+      <button class="btn btn-outline-secondary w-100" (click)="register()" [disabled]="!userForm.valid" required>Зарегистрироваться</button>
+    </div>
+
+    <div class="text-center">
+      Есть аккаунт? <a [routerLink]="['/login']" required>Войти</a>
+    </div>
+
+  </form>
+
+</div>
+  

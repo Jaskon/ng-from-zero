@@ -1,0 +1,21 @@
+:host {
+    left: 50%;
+    max-width: 360px;
+    min-width: 200px;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+input {
+    outline: none;
+}
+
+
+.input-error {
+    color: red;
+    font-size: 10pt;
+}
+.input-error-wrapper {
+    height: 4px;
+}
