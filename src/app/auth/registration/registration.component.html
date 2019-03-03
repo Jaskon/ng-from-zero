@@ -24,6 +24,7 @@
           <div [ngSwitch]="username.errors | firstKey">
             <div *ngSwitchCase="'required'">Введите email</div>
             <div *ngSwitchCase="'email'">Введите корректный email</div>
+            <div *ngSwitchCase="'alreadyExist'">Email уже занят</div>
           </div>
           
         </div>

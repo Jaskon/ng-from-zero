@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { User } from 'src/app/shared/models/user.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { timer } from 'rxjs';
 
 @Component({
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
   justRegistered: boolean;
 
 
-  constructor(private auth: AuthService, private route: ActivatedRoute) { }
+  constructor(private auth: AuthService, private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     // Show message if user is just registered
@@ -45,6 +46,8 @@ export class LoginComponent implements OnInit {
       // TODO: Redirect?
       this.loggingError = null;
       console.log(user);
+
+      this.router.navigate(['/system']);
     }, (error: string) => {
       // Show an error on the frontend
       this.loggingError = error;

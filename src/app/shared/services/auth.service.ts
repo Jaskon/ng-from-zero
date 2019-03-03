@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, of } from 'rxjs';
 import { User } from '../models/user.model';
 import { StorageService } from './storage.service';
 
@@ -22,6 +22,7 @@ export class AuthService {
           // TODO: Save to the localstorage
           const user = this.createUser(data[0]);
           this.storage.set('user', user);
+          // Return to subscriber
           observer.next(user);
           observer.complete();
         // Error
@@ -43,7 +44,17 @@ export class AuthService {
   }
 
   register(user: User) {
-    return this.http.post(environment.serverUrl + 'users', user);
+    // Temporary check of existing name in db. Delete when create separate rest server
+    return this.http.get(environment.serverUrl + `users?email=${user.email.toLowerCase()}`).pipe(
+      switchMap((data: Array<any>) => {
+        if (data.length > 0) {
+          return new Observable((observer) => observer.error('Email is already exist'));
+        }
+
+        // The only string that should be in the function at all (mb with some check of http error code, via pipe)
+        return this.http.post(environment.serverUrl + 'users', user);
+      })
+    );
   }
 
   createUser(obj: any) {

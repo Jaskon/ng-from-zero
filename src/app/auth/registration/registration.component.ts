@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { User } from 'src/app/shared/models/user.model';
 import { of } from 'rxjs';
@@ -13,11 +13,14 @@ import { Router } from '@angular/router';
 })
 export class RegistrationComponent implements OnInit {
 
+  usernamesChecked: Array<string> = [];
+
   userForm = new FormGroup({
     username: new FormControl('', {
       validators: [
         Validators.required,
-        Validators.email
+        Validators.email,
+        this.usernameAlreadyExistHandler()
         // Validators.pattern(/^\w[\w\d_-]*@\w[\w\d_-]*(?:\.\w[\w\d_-]*)+$/)
       ],
     }),
@@ -63,9 +66,22 @@ export class RegistrationComponent implements OnInit {
       // Redirect to the login page with data passing
       this.router.navigate(['/login', {registered: true}], {skipLocationChange: true});
     }, error => {
+      // Add to the list of checked usernames. Need to reload page if you want to try to enter the same username
+      if (!this.usernamesChecked.includes(this.username.value.toLowerCase())) {
+        this.usernamesChecked.push(this.username.value.toLowerCase());
+      }
+      this.username.updateValueAndValidity();
       console.log(error);
-      // TODO: Show error
     });
+  }
+
+
+  usernameAlreadyExistHandler(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} => {
+      if (this.usernamesChecked.includes(control.value.toLowerCase())) {
+        return {alreadyExist: false};
+      }
+    };
   }
 
 
